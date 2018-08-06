@@ -2,7 +2,7 @@ package snowball
 
 import (
 	"time"
-
+	// "fmt"
 	"github.com/ipfs/go-ipld-cbor"
 	"avalanche/member"
 )
@@ -23,19 +23,24 @@ func OnQuery(n *member.Node, transaction *cbornode.Node, responseChan chan *cbor
 			for {
 				responseCounts := make(map[*cbornode.Node]int)
 				responses := make([]chan *cbornode.Node, n.System.K)
+
+				nodes := n.System.Nodes.RandKOfNNodes(n.System.K, len(n.System.Nodes))
+
 				for i := 0; i < n.System.K; i++ {
 					respChan := make(chan *cbornode.Node, 1)
 					responses[i] = respChan
 					//fmt.Printf("node %v is querying %v\n", n.Id, node.Id)
-					go func(respChan chan *cbornode.Node) {
-						node := n.System.Nodes.RandNode()
+					go func(respChan chan *cbornode.Node, index int) {
+						node := nodes[index]
+						// node := n.System.Nodes.RandNode()
+
 						resp, err := node.SendQuery(transaction)
 						if err == nil {
 							respChan <- resp
 						} else {
 							respChan <- nil
 						}
-					}(respChan)
+					}(respChan, i)
 
 					//fmt.Printf("node %v received response %v from %v\n", n.Id, resp, node.Id)
 				}

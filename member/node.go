@@ -7,6 +7,7 @@ import (
 	"math/rand"
 	"github.com/ipfs/go-ipld-cbor"
 	"avalanche/storage"
+	// crytpoRand "crypto/rand"
 )
 
 type NodeId string
@@ -109,4 +110,54 @@ func (nh NodeHolder) RandNode() *Node {
 		i--
 	}
 	panic("never")
+}
+
+func makeRange(min, max int) []int {
+    a := make([]int, max-min+1)
+    for i := range a {
+        a[i] = min + i
+    }
+    return a
+}
+
+func shuffle(slice []int) {
+   r := rand.New(rand.NewSource(time.Now().Unix()))
+   for n := len(slice); n > 0; n-- {
+      randIndex := r.Intn(n)
+      slice[n-1], slice[randIndex] = slice[randIndex], slice[n-1]
+   }
+}
+
+func intInSlice(num int, list []int) bool {
+ for _, v := range list {
+	 if v == num {
+		 return true
+	 }
+ }
+ return false
+}
+
+func (nh NodeHolder) RandKOfNNodes(k int, n int) []*Node {
+	nodes := make([]*Node, k)
+
+	nodeIndicesPreShuffle := makeRange(0, n - 1)
+	shuffle(nodeIndicesPreShuffle)
+
+	nodeIndices := make([]int, k)
+
+	for i := 0; i < k; i++ {
+		nodeIndices[i] = nodeIndicesPreShuffle[i]
+	}
+
+	a := 0
+	i := n
+	for _,node := range nh {
+		if intInSlice(i, nodeIndices) {
+			nodes[a] = node
+			a++
+		}
+		i--
+	}
+
+	return nodes
 }

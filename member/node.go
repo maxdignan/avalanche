@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"math/rand"
 	"github.com/ipfs/go-ipld-cbor"
-	"github.com/quorumcontrol/avalanche/storage"
+	"avalanche/storage"
 )
 
 type NodeId string

@@ -7,8 +7,8 @@ import (
 
 	"github.com/ipfs/go-ipld-cbor"
 	"github.com/multiformats/go-multihash"
-	"github.com/quorumcontrol/avalanche/member"
-	"github.com/quorumcontrol/avalanche/storage"
+	"avalanche/member"
+	"avalanche/storage"
 	"github.com/stretchr/testify/assert"
 )
 

@@ -4,7 +4,7 @@ import (
 	"time"
 
 	"github.com/ipfs/go-ipld-cbor"
-	"github.com/quorumcontrol/avalanche/member"
+	"avalanche/member"
 )
 
 func OnQuery(n *member.Node, transaction *cbornode.Node, responseChan chan *cbornode.Node) {
